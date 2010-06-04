@@ -27,6 +27,10 @@ public class TicTacGameState implements GameState {
 		this.board = board;
 	}
 
+	public int getSize() {
+		return this.size;
+	}
+
 	protected void place(Tile tile, int x, int y) {
 		board[x][y] = tile;
 	}
