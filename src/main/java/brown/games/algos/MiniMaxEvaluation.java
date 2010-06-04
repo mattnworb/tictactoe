@@ -67,7 +67,7 @@ public class MiniMaxEvaluation implements Evaluation {
 		return best;
 	}
 
-	private class MoveEvaluation {
+	private static class MoveEvaluation {
 
 		protected final GameMove move;
 
