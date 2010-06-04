@@ -137,7 +137,7 @@ public class TicTacGameState implements GameState {
 		return false;
 	}
 
-	protected boolean isWinner(final Tile playerTile) {
+	protected boolean isWinner(final TicTacPlayer player) {
 		if (!isWin()) return false;
 
 		// return true if any tuple on the board has all tiles equal to
@@ -147,7 +147,7 @@ public class TicTacGameState implements GameState {
 			@Override
 			public boolean test(Tile[] tuple) {
 				for (int i = 0; i < tuple.length; i++) {
-					if (tuple[i] != playerTile) return false;
+					if (tuple[i] != player.getTile()) return false;
 				}
 				return true;
 			}

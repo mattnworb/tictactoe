@@ -38,4 +38,8 @@ public class TicTacGameMove implements GameMove {
 		((TicTacGameState) state).place(null, x, y);
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + "[tile=" + tile + ", x=" + x + ", y=" + y + "]";
+	}
 }

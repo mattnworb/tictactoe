@@ -41,7 +41,7 @@ public class TicTacGameScore implements GameScoring {
 
 	private int score(TicTacGameState state, TicTacPlayer player) {
 		if (state.isWin()) {
-			if (state.isWinner(player.getTile())) {
+			if (state.isWinner(player)) {
 				return Integer.MAX_VALUE;
 			}
 			// otherwise opponent won

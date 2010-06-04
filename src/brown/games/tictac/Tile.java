@@ -6,5 +6,10 @@ package brown.games.tictac;
  */
 public enum Tile {
 	X,
-	O
+	O;
+
+	@Override
+	public String toString() {
+		return name();
+	}
 }

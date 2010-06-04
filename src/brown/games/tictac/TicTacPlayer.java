@@ -16,7 +16,7 @@ public class TicTacPlayer implements Player {
 
 	private final Tile tile;
 
-	private GameScoring scoring;
+	private GameScoring scoring = new TicTacGameScore();
 
 	public TicTacPlayer(Tile tile) {
 		this.tile = tile;
@@ -52,5 +52,10 @@ public class TicTacPlayer implements Player {
 		}
 
 		return moves;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "[tile=" + tile + "]";
 	}
 }
