@@ -11,9 +11,9 @@ public class TicTacGameMove implements GameMove {
 
 	private final Tile tile;
 
-	private final int x;
+	protected final int x;
 
-	private final int y;
+	protected final int y;
 
 	public TicTacGameMove(Tile tile, int x, int y) {
 		this.tile = tile;

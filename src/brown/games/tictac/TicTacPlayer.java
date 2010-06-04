@@ -1,6 +1,8 @@
 package brown.games.tictac;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import brown.games.GameMove;
 import brown.games.GameScoring;
 import brown.games.GameState;
@@ -36,8 +38,19 @@ public class TicTacPlayer implements Player {
 
 	@Override
 	public Collection<GameMove> validMoves(GameState state) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		// can make a move in any empty square
+		List<GameMove> moves = new ArrayList<GameMove>();
 
+		TicTacGameState ttstate = (TicTacGameState) state;
+		final int size = ttstate.getSize();
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (ttstate.board[i][j] == null) {
+					moves.add(new TicTacGameMove(tile, i, j));
+				}
+			}
+		}
+
+		return moves;
+	}
 }
