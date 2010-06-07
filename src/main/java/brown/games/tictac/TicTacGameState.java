@@ -1,9 +1,13 @@
 package brown.games.tictac;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import brown.games.GameState;
 import brown.games.tictac.Board.Tuple;
 
 public class TicTacGameState implements GameState {
+
+	private static final Logger log = LoggerFactory.getLogger(TicTacGameState.class);
 
 	private final static int DEFAULT_SIZE = 3;
 
@@ -56,30 +60,33 @@ public class TicTacGameState implements GameState {
 		// A row, column or diagonal is defined as a draw if it contains at
 		// least one of each tile
 
-		BoardTest test = new BoardTest() {
+		BoardTest testForDraw = new BoardTest() {
 
 			@Override
 			public boolean test(Tuple tuple) {
-				return tuple.contains(Tile.X) && tuple.contains(Tile.O);
+
+				if (log.isDebugEnabled()) log.debug("test: testing tuple {}", tuple);
+				final boolean containsX = tuple.contains(Tile.X);
+				final boolean containsY = tuple.contains(Tile.O);
+				return containsX && containsY;
 			}
 		};
 
-		// // every row must be a draw for the board to be a draw
-		// boolean nonDrawFound = false;
-		// for (int i = 0; i < size; i++) {
-		// if (!test.test(board[i])) nonDrawFound = true;
-		// }
-		//
-		// return !nonDrawFound;
-		//		
-		return executeBoardTest(test);
+		boolean isDraw = true;
+		for (Tuple tuple : board.toTuples()) {
+			if (!testForDraw.test(tuple)) {
+				isDraw = false;
+				break;
+			}
+		}
+		return isDraw;
 	}
 
 	@Override
 	public boolean isWin() {
 
 		// we have a winning board if any tuple has all of the same element
-		return executeBoardTest(new BoardTest() {
+		return testEveryTuple(new BoardTest() {
 
 			@Override
 			public boolean test(Tuple tuple) {
@@ -96,13 +103,14 @@ public class TicTacGameState implements GameState {
 
 	/**
 	 * Executes the BoardTest against each possible tuple in the board
-	 * vertically, horizontally, and diagonally. Returns true as soon as the
-	 * BoardTest passes in any direction.
+	 * vertically, horizontally, and diagonally.
+	 * <p>
+	 * Returns true as soon as the first Tuple passed the BoardTest.
 	 * 
 	 * @param test
 	 * @return
 	 */
-	private boolean executeBoardTest(BoardTest boardTest) {
+	private boolean testEveryTuple(BoardTest boardTest) {
 		for (Tuple tuple : board.toTuples()) {
 			if (boardTest.test(tuple)) return true;
 		}
@@ -114,7 +122,7 @@ public class TicTacGameState implements GameState {
 
 		// return true if any tuple on the board has all tiles equal to
 		// playerTile
-		return executeBoardTest(new BoardTest() {
+		return testEveryTuple(new BoardTest() {
 
 			@Override
 			public boolean test(Tuple tuple) {
