@@ -22,8 +22,6 @@ public class MiniMaxEvaluation implements Evaluation {
 
 	private Player original;
 
-	private GameState state;
-
 	private int ply;
 
 	public MiniMaxEvaluation(int ply) {
@@ -37,16 +35,19 @@ public class MiniMaxEvaluation implements Evaluation {
 			log.info("bestMove: calculating best move for player {} state {}", player, s);
 
 		this.original = player;
-		this.state = s.copy();
+		MoveEvaluation best = minimax(s.copy(), ply, player, opponent);
 
-		MoveEvaluation best = minimax(state, ply, player, opponent);
+		if (log.isInfoEnabled()) log.info("bestMove: the best possible move is [{}]", best);
 
 		GameMove bestMove = best.move;
 
-		if (log.isInfoEnabled())
-			log.info("bestMove: returning best move {} with evaluation {}", bestMove, best);
-
-		return bestMove;
+		if (best.move != null) {
+			return bestMove;
+		}
+		// we reached a point where all moves lead to a loss - if any moves
+		// at all exist, just return an arbitrary move
+		Collection<GameMove> moves = player.validMoves(s);
+		return moves.isEmpty() ? null : moves.iterator().next();
 	}
 
 	private MoveEvaluation minimax(GameState s, int p, Player player, Player opponent) {
@@ -60,8 +61,8 @@ public class MiniMaxEvaluation implements Evaluation {
 		// if no more moves or we've reached the end of the analysis, return the
 		// state score
 		if (p == 0 || moves.isEmpty()) {
-			
-			final int score = original.eval(state);
+
+			final int score = original.eval(s);
 			final MoveEvaluation e = new MoveEvaluation(score);
 			if (log.isDebugEnabled()) log.debug("minimax: at end of tree, returning [{}]", e);
 			return e;
@@ -70,8 +71,7 @@ public class MiniMaxEvaluation implements Evaluation {
 		final boolean isPlayer = player == original;
 
 		// set a lower bound for best, which we will try to improve on
-		MoveEvaluation best = new MoveEvaluation(isPlayer ? Integer.MIN_VALUE
-				: Integer.MAX_VALUE);
+		MoveEvaluation best = new MoveEvaluation(isPlayer ? Integer.MIN_VALUE : Integer.MAX_VALUE);
 
 		for (GameMove move : moves) {
 			move.execute(s);
