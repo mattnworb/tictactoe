@@ -39,7 +39,7 @@ public class TTRunner {
 		TicTacPlayer human = new TicTacPlayer(Tile.X);
 		TicTacPlayer computer = new TicTacPlayer(Tile.O);
 
-		int ply = 3;
+		int ply = 2;
 		int size = 3;
 
 		Evaluation evaluation = new MiniMaxEvaluation(ply);
