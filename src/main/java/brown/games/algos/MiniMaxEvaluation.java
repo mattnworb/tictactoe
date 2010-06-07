@@ -62,7 +62,7 @@ public class MiniMaxEvaluation implements Evaluation {
 		// state score
 		if (p == 0 || moves.isEmpty()) {
 
-			final int score = original.eval(s);
+			final int score = player.eval(s);
 			final MoveEvaluation e = new MoveEvaluation(score);
 			if (log.isDebugEnabled()) log.debug("minimax: at end of tree, returning [{}]", e);
 			return e;
