@@ -1,0 +1,4 @@
+6/6/2010: version 0.1
+--------------------------
+Algorithm is able to block winning moves when ply value is even - seems to make
+bad choices when the value is odd.
