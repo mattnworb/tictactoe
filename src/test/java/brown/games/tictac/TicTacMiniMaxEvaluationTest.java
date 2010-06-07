@@ -52,7 +52,7 @@ public class TicTacMiniMaxEvaluationTest {
 
 		if (log.isDebugEnabled()) log.debug("testBlocksWinningMove: move is {}", move);
 
-		TicTacGameMove expected = new TicTacGameMove(Tile.O, 2, 0);
+		TicTacGameMove expected = new TicTacGameMove(Tile.O, 0, 2);
 		assertEquals(expected, move);
 	}
 
@@ -70,7 +70,7 @@ public class TicTacMiniMaxEvaluationTest {
 
 		if (log.isDebugEnabled()) log.debug("testBlocksWinningMove: move is {}", move);
 
-		TicTacGameMove expected = new TicTacGameMove(Tile.O, 2, 0);
+		TicTacGameMove expected = new TicTacGameMove(Tile.O, 0, 2);
 		assertEquals(expected, move);
 	}
 

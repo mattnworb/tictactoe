@@ -54,4 +54,40 @@ public class TicTacGameMove implements GameMove {
 	public String toString() {
 		return super.toString() + "[tile=" + tile + ", r=" + r + ", c=" + c + "]";
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + c;
+		result = prime * result + r;
+		result = prime * result + ((tile == null) ? 0 : tile.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		TicTacGameMove other = (TicTacGameMove) obj;
+		if (c != other.c) return false;
+		if (r != other.r) return false;
+		if (tile == null) {
+			if (other.tile != null) return false;
+		}
+		else if (!tile.equals(other.tile)) return false;
+		return true;
+	}
+
 }
