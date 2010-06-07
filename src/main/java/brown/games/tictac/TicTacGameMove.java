@@ -21,6 +21,18 @@ public class TicTacGameMove implements GameMove {
 		this.y = y;
 	}
 
+	public Tile getTile() {
+		return tile;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
 	@Override
 	public void execute(GameState state) {
 		((TicTacGameState) state).place(tile, x, y);

@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import brown.games.Evaluation;
 import brown.games.GameMove;
 import brown.games.GameState;
@@ -14,6 +16,8 @@ import brown.games.algos.MiniMaxEvaluation;
  * @date Jun 3, 2010
  */
 public class TTRunner {
+
+	private static final Logger log = LoggerFactory.getLogger(TTRunner.class);
 
 	private TicTacPlayer human;
 
@@ -62,6 +66,9 @@ public class TTRunner {
 
 		while (!state.isDraw() && !state.isWin()) {
 			GameMove move = getNextPlayerMove(scanner, state);
+
+			if (log.isInfoEnabled()) log.info("runGame: player selected move {}", move);
+
 			move.execute(state);
 			prettyPrintBoard(System.out, state);
 
@@ -69,7 +76,7 @@ public class TTRunner {
 			if (state.isDraw() || state.isWin()) break;
 
 			GameMove opponentMove = evaluation.bestMove(state, computer, human);
-			System.out.println("The computer has decided where to move:");
+			System.out.println("The computer has decided where to move: " + opponentMove);
 			opponentMove.execute(state);
 			prettyPrintBoard(System.out, state);
 		}

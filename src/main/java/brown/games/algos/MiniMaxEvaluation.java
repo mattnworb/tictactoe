@@ -1,6 +1,8 @@
 package brown.games.algos;
 
 import java.util.Collection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import brown.games.Evaluation;
 import brown.games.GameMove;
 import brown.games.GameState;
@@ -16,6 +18,8 @@ import brown.games.Player;
  */
 public class MiniMaxEvaluation implements Evaluation {
 
+	private static final Logger log = LoggerFactory.getLogger(MiniMaxEvaluation.class);
+
 	private Player original;
 
 	private GameState state;
@@ -29,15 +33,27 @@ public class MiniMaxEvaluation implements Evaluation {
 	@Override
 	public GameMove bestMove(GameState s, Player player, Player opponent) {
 
+		if (log.isInfoEnabled())
+			log.info("bestMove: calculating best move for player {} state {}", player, s);
+
 		this.original = player;
 		this.state = s.copy();
 
 		MoveEvaluation best = minimax(state, ply, player, opponent);
 
-		return best.move;
+		GameMove bestMove = best.move;
+
+		if (log.isInfoEnabled())
+			log.info("bestMove: returning best move {} with evaluation {}", bestMove, best);
+
+		return bestMove;
 	}
 
 	private MoveEvaluation minimax(GameState s, int p, Player player, Player opponent) {
+
+		if (log.isDebugEnabled())
+			log.debug("minimax: evaluating player {} opponent {} at ply {} state {}", new Object[]{
+					player, opponent, p, s });
 
 		Collection<GameMove> moves = player.validMoves(s);
 
@@ -58,9 +74,15 @@ public class MiniMaxEvaluation implements Evaluation {
 
 			// if we improved, keep track of new score and move
 			if (player == original) {
-				if (me.score > best.score) best = new MoveEvaluation(move, me.score);
+				if (me.score > best.score) {
+					if (log.isDebugEnabled())
+						log.debug("minimax: move {} is better than previous best {}", me, best);
+					best = new MoveEvaluation(move, me.score);
+				}
 			}
 			else {
+				if (log.isDebugEnabled())
+					log.debug("minimax: move {} is better than previous best {}", me, best);
 				if (me.score < best.score) best = new MoveEvaluation(move, me.score);
 			}
 		}
@@ -82,5 +104,9 @@ public class MiniMaxEvaluation implements Evaluation {
 			this.score = score;
 		}
 
+		@Override
+		public String toString() {
+			return super.toString() + "[move=" + move + ",score=" + score + "]";
+		}
 	}
 }

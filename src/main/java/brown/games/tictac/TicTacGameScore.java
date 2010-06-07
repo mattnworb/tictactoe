@@ -1,6 +1,8 @@
 package brown.games.tictac;
 
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import brown.games.GameScoring;
 import brown.games.GameState;
 import brown.games.Player;
@@ -20,6 +22,9 @@ import brown.games.Player;
  */
 public class TicTacGameScore implements GameScoring {
 
+
+	private static final Logger log = LoggerFactory.getLogger(TicTacGameScore.class);
+
 	/**
 	 * Return score for this player at this state. Returns:
 	 * <p>
@@ -36,7 +41,12 @@ public class TicTacGameScore implements GameScoring {
 	 */
 	@Override
 	public int score(GameState state, Player player) {
-		return score((TicTacGameState) state, (TicTacPlayer) player);
+		int score = score((TicTacGameState) state, (TicTacPlayer) player);
+
+		if (log.isDebugEnabled())
+			log.debug("score: score for player {} state {} is {}", new Object[]{ player, state,
+					score });
+		return score;
 	}
 
 	private int score(TicTacGameState state, TicTacPlayer player) {

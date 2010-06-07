@@ -31,6 +31,21 @@ public class TicTacGameState implements GameState {
 		return this.size;
 	}
 
+	/**
+	 * Places tile at position (x, y). For example, in the following board:
+	 * <p>
+	 * <code>
+	 * X | X | O<br/>
+	 * - | O | -<br/>
+	 * - | - | -
+	 * </code>
+	 * <p>
+	 * X has tiles at (,) and (,), and O has tiles at (,) and (1, 1).
+	 * 
+	 * @param tile
+	 * @param x
+	 * @param y
+	 */
 	protected void place(Tile tile, int x, int y) {
 		board[x][y] = tile;
 	}
@@ -152,6 +167,21 @@ public class TicTacGameState implements GameState {
 				return true;
 			}
 		});
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(super.toString() + "[board=");
+
+		// how ugly can i make these nested loops?
+		for (int i = 0, r = 0; r < size; r++) {
+			for (int c = 0; c < size; c++, i++) {
+				sb.append(i + "=" + board[r][c]);
+				if (i < size * size - 1) sb.append(",");
+			}
+		}
+
+		return sb.append("]").toString();
 	}
 
 	/**

@@ -3,6 +3,8 @@ package brown.games.tictac;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import brown.games.GameMove;
 import brown.games.GameScoring;
 import brown.games.GameState;
@@ -13,6 +15,8 @@ import brown.games.Player;
  * @date Jun 3, 2010
  */
 public class TicTacPlayer implements Player {
+
+	private static final Logger log = LoggerFactory.getLogger(TicTacPlayer.class);
 
 	private final Tile tile;
 
@@ -50,6 +54,9 @@ public class TicTacPlayer implements Player {
 				}
 			}
 		}
+
+		if (log.isDebugEnabled())
+			log.debug("validMoves: returning {} moves: {}", moves.size(), moves);
 
 		return moves;
 	}
