@@ -1,12 +1,13 @@
 package brown.games.tictac;
 
 import brown.games.GameState;
+import brown.games.tictac.Board.Tuple;
 
 public class TicTacGameState implements GameState {
 
 	private final static int DEFAULT_SIZE = 3;
 
-	protected final Tile[][] board;
+	protected final Board board;
 
 	private final int size;
 
@@ -19,11 +20,11 @@ public class TicTacGameState implements GameState {
 
 	public TicTacGameState(int size) {
 		this.size = size;
-		board = new Tile[size][size];
+		board = new Board(size);
 	}
 
-	public TicTacGameState(Tile[][] board) {
-		this.size = board.length;
+	public TicTacGameState(Board board) {
+		this.size = board.getSize();
 		this.board = board;
 	}
 
@@ -32,22 +33,14 @@ public class TicTacGameState implements GameState {
 	}
 
 	/**
-	 * Places tile at position (x, y). For example, in the following board:
-	 * <p>
-	 * <code>
-	 * X | X | O<br/>
-	 * - | O | -<br/>
-	 * - | - | -
-	 * </code>
-	 * <p>
-	 * X has tiles at (,) and (,), and O has tiles at (,) and (1, 1).
+	 * Places tile at row r and column c.
 	 * 
 	 * @param tile
-	 * @param x
-	 * @param y
+	 * @param r
+	 * @param c
 	 */
-	protected void place(Tile tile, int x, int y) {
-		board[x][y] = tile;
+	protected void place(Tile tile, int r, int c) {
+		board.place(tile, r, c);
 	}
 
 	@Override
@@ -66,40 +59,35 @@ public class TicTacGameState implements GameState {
 		BoardTest test = new BoardTest() {
 
 			@Override
-			public boolean test(Tile[] tuple) {
-				boolean xFound = false;
-				boolean oFound = false;
-				for (int i = 0; i < tuple.length; i++) {
-					if (tuple[i] == Tile.X) xFound = true;
-					if (tuple[i] == Tile.O) oFound = true;
-
-					if (xFound && oFound) return true;
-				}
-				return false;
+			public boolean test(Tuple tuple) {
+				return tuple.contains(Tile.X) && tuple.contains(Tile.O);
 			}
 		};
 
-		// every row must be a draw for the board to be a draw
-		boolean nonDrawFound = false;
-		for (int i = 0; i < size; i++) {
-			if (!test.test(board[i])) nonDrawFound = true;
-		}
-
-		return !nonDrawFound;
+		// // every row must be a draw for the board to be a draw
+		// boolean nonDrawFound = false;
+		// for (int i = 0; i < size; i++) {
+		// if (!test.test(board[i])) nonDrawFound = true;
+		// }
+		//
+		// return !nonDrawFound;
+		//		
+		return executeBoardTest(test);
 	}
 
 	@Override
 	public boolean isWin() {
+
 		// we have a winning board if any tuple has all of the same element
-		return testBoard(new BoardTest() {
+		return executeBoardTest(new BoardTest() {
 
 			@Override
-			public boolean test(Tile[] tuple) {
-				Tile start = tuple[0];
+			public boolean test(Tuple tuple) {
+				Tile start = tuple.getValue(0);
 				if (start == null) return false;
 
-				for (int i = 1; i < tuple.length; i++) {
-					if (start != tuple[i]) return false;
+				for (Tile t : tuple) {
+					if (t != start) return false;
 				}
 				return true;
 			}
@@ -114,41 +102,10 @@ public class TicTacGameState implements GameState {
 	 * @param test
 	 * @return
 	 */
-	private boolean testBoard(BoardTest test) {
-		return testBoardVert(test) || testBoardHoriz(test) || testDiagonals(test);
-	}
-
-	private boolean testBoardVert(BoardTest tester) {
-		for (int i = 0; i < size; i++) {
-			if (tester.test(board[i])) return true;
+	private boolean executeBoardTest(BoardTest boardTest) {
+		for (Tuple tuple : board.toTuples()) {
+			if (boardTest.test(tuple)) return true;
 		}
-		return false;
-	}
-
-	private boolean testBoardHoriz(BoardTest tester) {
-		for (int i = 0; i < size; i++) {
-			Tile[] row = new Tile[size];
-			for (int c = 0; c < size; c++) {
-				row[c] = board[c][i];
-			}
-			if (tester.test(row)) return true;
-		}
-		return false;
-	}
-
-	private boolean testDiagonals(BoardTest tester) {
-		Tile[] diag = new Tile[size];
-		for (int i = 0; i < size; i++) {
-			diag[i] = board[i][i];
-		}
-		if (tester.test(diag)) return true;
-
-		diag = new Tile[size];
-		for (int i = 0; i < size; i++) {
-			diag[i] = board[size - i - 1][i];
-		}
-		if (tester.test(diag)) return true;
-
 		return false;
 	}
 
@@ -157,12 +114,12 @@ public class TicTacGameState implements GameState {
 
 		// return true if any tuple on the board has all tiles equal to
 		// playerTile
-		return testBoard(new BoardTest() {
+		return executeBoardTest(new BoardTest() {
 
 			@Override
-			public boolean test(Tile[] tuple) {
-				for (int i = 0; i < tuple.length; i++) {
-					if (tuple[i] != player.getTile()) return false;
+			public boolean test(Tuple tuple) {
+				for (Tile tile : tuple) {
+					if (tile != player.getTile()) return false;
 				}
 				return true;
 			}
@@ -173,12 +130,9 @@ public class TicTacGameState implements GameState {
 	public String toString() {
 		StringBuilder sb = new StringBuilder(super.toString() + "[board=");
 
-		// how ugly can i make these nested loops?
-		for (int i = 0, r = 0; r < size; r++) {
-			for (int c = 0; c < size; c++, i++) {
-				sb.append(i + "=" + board[r][c]);
-				if (i < size * size - 1) sb.append(",");
-			}
+		for (int i = 0; i < board.getNumTiles(); i++) {
+			sb.append(i + "=" + board.getValue(i));
+			if (i < size * size - 1) sb.append(",");
 		}
 
 		return sb.append("]").toString();
@@ -193,7 +147,7 @@ public class TicTacGameState implements GameState {
 	 */
 	private interface BoardTest {
 
-		boolean test(Tile[] tuple);
+		boolean test(Tuple tuple);
 	}
 
 }

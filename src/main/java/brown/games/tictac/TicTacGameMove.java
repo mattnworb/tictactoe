@@ -11,47 +11,47 @@ public class TicTacGameMove implements GameMove {
 
 	private final Tile tile;
 
-	protected final int x;
+	private final int r;
 
-	protected final int y;
+	private final int c;
 
-	public TicTacGameMove(Tile tile, int x, int y) {
+	public TicTacGameMove(Tile tile, int r, int c) {
 		this.tile = tile;
-		this.x = x;
-		this.y = y;
+		this.r = r;
+		this.c = c;
 	}
 
 	public Tile getTile() {
 		return tile;
 	}
 
-	public int getX() {
-		return x;
+	public int getRow() {
+		return r;
 	}
 
-	public int getY() {
-		return y;
+	public int getColumn() {
+		return c;
 	}
 
 	@Override
 	public void execute(GameState state) {
-		((TicTacGameState) state).place(tile, x, y);
+		((TicTacGameState) state).place(tile, r, c);
 	}
 
 	@Override
 	public boolean isValid(GameState state) {
 
 		// valid if tile is not already taken
-		return ((TicTacGameState) state).board[x][y] == null;
+		return ((TicTacGameState) state).board.isEmpty(r, c);
 	}
 
 	@Override
 	public void undo(GameState state) {
-		((TicTacGameState) state).place(null, x, y);
+		((TicTacGameState) state).place(null, r, c);
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "[tile=" + tile + ", x=" + x + ", y=" + y + "]";
+		return super.toString() + "[tile=" + tile + ", r=" + r + ", c=" + c + "]";
 	}
 }

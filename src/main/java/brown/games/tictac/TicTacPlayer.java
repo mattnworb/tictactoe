@@ -47,10 +47,10 @@ public class TicTacPlayer implements Player {
 
 		TicTacGameState ttstate = (TicTacGameState) state;
 		final int size = ttstate.getSize();
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				if (ttstate.board[i][j] == null) {
-					moves.add(new TicTacGameMove(tile, i, j));
+		for (int r = 0; r < size; r++) {
+			for (int c = 0; c < size; c++) {
+				if (ttstate.board.isEmpty(r, c)) {
+					moves.add(new TicTacGameMove(tile, r, c));
 				}
 			}
 		}

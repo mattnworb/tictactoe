@@ -9,10 +9,6 @@ import org.slf4j.LoggerFactory;
 import brown.games.GameState;
 import brown.games.Player;
 import brown.games.algos.MiniMaxEvaluation;
-import brown.games.tictac.TicTacGameMove;
-import brown.games.tictac.TicTacGameState;
-import brown.games.tictac.TicTacPlayer;
-import brown.games.tictac.Tile;
 
 
 
@@ -29,24 +25,27 @@ public class TicTacMiniMaxEvaluationTest {
 
 	private Player player;
 
-	private Tile[][] boards;
+	private Board board;
 
 	private GameState state;
 
 	@Before
 	public void setUp() {
 		eval = new MiniMaxEvaluation(2);
-		boards = new Tile[3][];
-		state = new TicTacGameState(boards);
+		board = new Board(3);
+		state = new TicTacGameState(board);
 		player = new TicTacPlayer(Tile.O);
 	}
 
 	@Test
 	public void testBlocksWinningMoveAtPly2() {
 
-		boards[0] = new Tile[]{ Tile.X, Tile.X, null };
-		boards[1] = new Tile[]{ null, Tile.O, null };
-		boards[2] = new Tile[]{ null, null, null };
+		// boards[0] = new Tile[]{ Tile.X, Tile.X, null };
+		// boards[1] = new Tile[]{ null, Tile.O, null };
+		// boards[2] = new Tile[]{ null, null, null };
+		board.place(Tile.X, 0, 0);
+		board.place(Tile.X, 0, 1);
+		board.place(Tile.O, 1, 1);
 
 		TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player,
 			new TicTacPlayer(Tile.X));
@@ -62,9 +61,9 @@ public class TicTacMiniMaxEvaluationTest {
 
 		eval = new MiniMaxEvaluation(3);
 
-		boards[0] = new Tile[]{ Tile.X, Tile.X, null };
-		boards[1] = new Tile[]{ null, Tile.O, null };
-		boards[2] = new Tile[]{ null, null, null };
+		board.place(Tile.X, 0, 0);
+		board.place(Tile.X, 0, 1);
+		board.place(Tile.O, 1, 1);
 
 		TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player,
 			new TicTacPlayer(Tile.X));
@@ -80,9 +79,14 @@ public class TicTacMiniMaxEvaluationTest {
 	 */
 	@Test
 	public void testMoveIsReturnedWhenAllLeadToLoss() {
-		boards[0] = new Tile[]{ Tile.X, null, Tile.O };
-		boards[1] = new Tile[]{ null, Tile.O, null };
-		boards[2] = new Tile[]{ Tile.X, null, Tile.X };
+		// boards[0] = new Tile[]{ Tile.X, null, Tile.O };
+		// boards[1] = new Tile[]{ null, Tile.O, null };
+		// boards[2] = new Tile[]{ Tile.X, null, Tile.X };
+		board.place(Tile.X, 0, 0);
+		board.place(Tile.O, 0, 2);
+		board.place(Tile.O, 1, 1);
+		board.place(Tile.X, 2, 0);
+		board.place(Tile.X, 2, 2);
 
 		TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player,
 			new TicTacPlayer(Tile.X));

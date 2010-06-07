@@ -1,11 +1,12 @@
 package brown.games.tictac;
 
-import java.util.Set;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import brown.games.GameScoring;
 import brown.games.GameState;
 import brown.games.Player;
+import brown.games.tictac.Board.Tuple;
 
 /**
  * BoardEvaluation algorithm.
@@ -59,11 +60,11 @@ public class TicTacGameScore implements GameScoring {
 
 		}
 
-		Set<Tile[]> tuples = Tuplizer.getTuples(state.board);
+		Collection<Tuple> tuples = state.board.toTuples();
 
 		int myscore = 0;
 		int oppscore = 0;
-		for (Tile[] tuple : tuples) {
+		for (Tuple tuple : tuples) {
 			// can i score this?
 			myscore += canScore(tuple, player.getTile());
 			oppscore += canScore(tuple, getOpponent(player.getTile()));
@@ -72,7 +73,7 @@ public class TicTacGameScore implements GameScoring {
 		return myscore - oppscore;
 	}
 
-	private int canScore(Tile[] tuple, Tile tile) {
+	private int canScore(Tuple tuple, Tile tile) {
 		Tile opp = getOpponent(tile);
 		for (Tile t : tuple) {
 			if (t == opp) {

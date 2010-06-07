@@ -31,9 +31,16 @@ public class TicTacGameScoreTest {
 	@Test
 	public void testSomeoneWins() {
 
-		state.board[0] = new Tile[]{ Tile.O, null, Tile.X };
-		state.board[1] = new Tile[]{ null, Tile.O, Tile.X };
-		state.board[2] = new Tile[]{ Tile.X, Tile.O, Tile.X };
+		// state.board[0] = new Tile[]{ Tile.O, null, Tile.X };
+		// state.board[1] = new Tile[]{ null, Tile.O, Tile.X };
+		// state.board[2] = new Tile[]{ Tile.X, Tile.O, Tile.X };
+		state.board.place(Tile.O, 0);
+		state.board.place(Tile.X, 2);
+		state.board.place(Tile.O, 4);
+		state.board.place(Tile.X, 5);
+		state.board.place(Tile.X, 6);
+		state.board.place(Tile.O, 7);
+		state.board.place(Tile.X, 8);
 
 		assertEquals(Integer.MAX_VALUE, scoring.score(state, playerX));
 		assertEquals(Integer.MIN_VALUE, scoring.score(state, playerO));
@@ -50,9 +57,10 @@ public class TicTacGameScoreTest {
 	@Test
 	public void testUnevenPossibilities() {
 
-		state.board[0] = new Tile[]{ Tile.O, null, null };
-		state.board[1] = new Tile[]{ null, null, null };
-		state.board[2] = new Tile[]{ null, null, null };
+		// state.board[0] = new Tile[]{ Tile.O, null, null };
+		// state.board[1] = new Tile[]{ null, null, null };
+		// state.board[2] = new Tile[]{ null, null, null };
+		state.board.place(Tile.O, 0);
 
 		// O has eight tuples, X has five tuples
 

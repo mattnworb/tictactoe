@@ -27,16 +27,24 @@ public class TicTacPlayerTest {
 	public void testValidMoves() {
 		Player player = new TicTacPlayer(Tile.X);
 		TicTacGameState state = new TicTacGameState();
-		state.board[0] = new Tile[]{ Tile.X, Tile.O, Tile.X };
-		state.board[1] = new Tile[]{ Tile.X, null, Tile.X };
-		state.board[2] = new Tile[]{ Tile.X, Tile.O, Tile.X };
+		// state.board[0] = new Tile[]{ Tile.X, Tile.O, Tile.X };
+		// state.board[1] = new Tile[]{ Tile.X, null, Tile.X };
+		// state.board[2] = new Tile[]{ Tile.X, Tile.O, Tile.X };
+		state.board.place(Tile.X, 0);
+		state.board.place(Tile.O, 1);
+		state.board.place(Tile.X, 2);
+		state.board.place(Tile.X, 3);
+		state.board.place(Tile.X, 5);
+		state.board.place(Tile.X, 6);
+		state.board.place(Tile.O, 7);
+		state.board.place(Tile.X, 8);
 
 		Collection<GameMove> moves = player.validMoves(state);
 		assertEquals(1, moves.size());
 
 		TicTacGameMove move = (TicTacGameMove) moves.iterator().next();
-		assertEquals(1, move.x);
-		assertEquals(1, move.y);
+		assertEquals(1, move.getRow());
+		assertEquals(1, move.getColumn());
 
 	}
 }

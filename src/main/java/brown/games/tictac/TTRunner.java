@@ -1,7 +1,6 @@
 package brown.games.tictac;
 
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import org.slf4j.Logger;
@@ -70,7 +69,7 @@ public class TTRunner {
 			if (log.isInfoEnabled()) log.info("runGame: player selected move {}", move);
 
 			move.execute(state);
-			prettyPrintBoard(System.out, state);
+			state.board.prettyPrint(System.out);
 
 			// check if game just ended
 			if (state.isDraw() || state.isWin()) break;
@@ -78,7 +77,7 @@ public class TTRunner {
 			GameMove opponentMove = evaluation.bestMove(state, computer, human);
 			System.out.println("The computer has decided where to move: " + opponentMove);
 			opponentMove.execute(state);
-			prettyPrintBoard(System.out, state);
+			state.board.prettyPrint(System.out);
 		}
 
 		if (state.isDraw()) {
@@ -131,16 +130,4 @@ public class TTRunner {
 
 		return move;
 	}
-
-	public void prettyPrintBoard(PrintStream out, TicTacGameState state) {
-		final Tile[][] board = state.board;
-		for (int x = 0; x < state.getSize(); x++) {
-			for (int y = 0; y < state.getSize(); y++) {
-				out.print(board[x][y] != null ? board[x][y] : " ");
-				if (y < state.getSize() - 1) out.print(" | ");
-			}
-			out.println();
-		}
-	}
-
 }

@@ -27,11 +27,11 @@ public class TicTacGameMoveTest {
 	@Test
 	public void testIsValidOnEmptyBoard() {
 		//every move should be valid
-		for (int i = 0; i < state.getSize(); i++ ) {
-			for (int j = 0; j < state.getSize(); j++ ) {
-				GameMove move1 = new TicTacGameMove(Tile.O, i, j);
+		for (int r = 0; r < state.getSize(); r++ ) {
+			for (int c = 0; c < state.getSize(); c++ ) {
+				GameMove move1 = new TicTacGameMove(Tile.O, r, c);
 				assertTrue(move1.isValid(state));
-				GameMove move2 = new TicTacGameMove(Tile.X, i, j);
+				GameMove move2 = new TicTacGameMove(Tile.X, r, c);
 				assertTrue(move2.isValid(state));
 			}
 		}
@@ -39,7 +39,7 @@ public class TicTacGameMoveTest {
 
 	@Test
 	public void testIsNotValid() {
-		state.board[0][0] = Tile.O;
+		state.board.place(Tile.O, 0);
 		assertFalse(new TicTacGameMove(Tile.O, 0, 0).isValid(state));
 		assertFalse(new TicTacGameMove(Tile.X, 0, 0).isValid(state));
 	}
@@ -48,7 +48,7 @@ public class TicTacGameMoveTest {
 	public void testExecute() {
 		GameMove move = new TicTacGameMove(Tile.O, 0, 0);
 		move.execute(state);
-		assertEquals(Tile.O, state.board[0][0]);
+		assertEquals(Tile.O, state.board.getValue(0));
 		assertFalse(move.isValid(state));
 	}
 
@@ -56,11 +56,11 @@ public class TicTacGameMoveTest {
 	public void testUndo() {
 		GameMove move = new TicTacGameMove(Tile.O, 0, 0);
 		move.execute(state);
-		assertEquals(Tile.O, state.board[0][0]);
+		assertEquals(Tile.O, state.board.getValue(0));
 		assertFalse(move.isValid(state));
 
 		move.undo(state);
-		assertNull(state.board[0][0]);
+		assertNull(state.board.getValue(0));
 		assertTrue(move.isValid(state));
 	}
 }
