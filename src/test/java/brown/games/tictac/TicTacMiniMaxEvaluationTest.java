@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import brown.games.GameState;
 import brown.games.Player;
 import brown.games.algos.MiniMaxEvaluation;
 
@@ -22,45 +21,42 @@ public class TicTacMiniMaxEvaluationTest {
 
 	private Player player;
 
-	private Board board;
-
-	private GameState state;
+	private TicTacGameState state;
 
 	@Before
 	public void setUp() {
-		eval = new MiniMaxEvaluation(2);
-		board = new Board(3);
-		state = new TicTacGameState(board);
 		player = new TicTacPlayer(Tile.O);
+		state = new TicTacGameState();
+		eval = new MiniMaxEvaluation(2);
 	}
 
 	@Test
-	public void testBlocksWinningMoveAtPly2() {
-		testBlocksWinningMove(2);
-	}
+	public void testBlocksWinningMove() {
 
-	@Test
-	public void testBlocksWinningMoveAtPly3() {
-		testBlocksWinningMove(3);
+		state.board.place(Tile.X, 0, 0);
+		state.board.place(Tile.X, 0, 1);
+		state.board.place(Tile.O, 1, 1);
+
+		TicTacGameMove expected = new TicTacGameMove(Tile.O, 0, 2);
+
+		testReturnsExpectedMove(state, expected);
 	}
 
 	/**
-	 * @param ply
+	 * @param state
+	 * @param expected
 	 */
-	private void testBlocksWinningMove(int ply) {
-		eval = new MiniMaxEvaluation(ply);
+	private void testReturnsExpectedMove(TicTacGameState state, TicTacGameMove expected) {
+		for (int ply = 2; ply < 6; ply++) {
+			eval = new MiniMaxEvaluation(ply);
 
-		board.place(Tile.X, 0, 0);
-		board.place(Tile.X, 0, 1);
-		board.place(Tile.O, 1, 1);
+			TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player, new TicTacPlayer(
+				Tile.X));
 
-		TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player,
-			new TicTacPlayer(Tile.X));
+			if (log.isDebugEnabled()) log.debug("testBlocksWinningMove: move is {}", move);
 
-		if (log.isDebugEnabled()) log.debug("testBlocksWinningMove: move is {}", move);
-
-		TicTacGameMove expected = new TicTacGameMove(Tile.O, 0, 2);
-		assertEquals(expected, move);
+			assertEquals("Minimax did not make expected move at ply=" + ply, expected, move);
+		}
 	}
 
 	/**
@@ -71,16 +67,17 @@ public class TicTacMiniMaxEvaluationTest {
 		// boards[0] = new Tile[]{ Tile.X, null, Tile.O };
 		// boards[1] = new Tile[]{ null, Tile.O, null };
 		// boards[2] = new Tile[]{ Tile.X, null, Tile.X };
-		board.place(Tile.X, 0, 0);
-		board.place(Tile.O, 0, 2);
-		board.place(Tile.O, 1, 1);
-		board.place(Tile.X, 2, 0);
-		board.place(Tile.X, 2, 2);
 
-		TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player,
-			new TicTacPlayer(Tile.X));
+		state.board.place(Tile.X, 0, 0);
+		state.board.place(Tile.O, 0, 2);
+		state.board.place(Tile.O, 1, 1);
+		state.board.place(Tile.X, 2, 0);
+		state.board.place(Tile.X, 2, 2);
 
-		assertNotNull(move);
+		for (int ply = 2; ply < 6; ply++) {
+			eval = new MiniMaxEvaluation(ply);
+			assertNotNull(eval.bestMove(state, player, new TicTacPlayer(Tile.X)));
+		}
 	}
 
 	@Test
@@ -88,18 +85,14 @@ public class TicTacMiniMaxEvaluationTest {
 		// X | X | O
 		// - | O | -
 		// X | - | -
-		board.place(Tile.X, 0, 0);
-		board.place(Tile.X, 0, 1);
-		board.place(Tile.X, 2, 0);
+		state.board.place(Tile.X, 0, 0);
+		state.board.place(Tile.X, 0, 1);
+		state.board.place(Tile.X, 2, 0);
 
-		board.place(Tile.O, 0, 2);
-		board.place(Tile.O, 1, 1);
+		state.board.place(Tile.O, 0, 2);
+		state.board.place(Tile.O, 1, 1);
 
 		TicTacGameMove expected = new TicTacGameMove(Tile.O, 1, 0);
-
-		TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player,
-			new TicTacPlayer(Tile.X));
-
-		assertEquals(expected, move);
+		testReturnsExpectedMove(state, expected);
 	}
 }
