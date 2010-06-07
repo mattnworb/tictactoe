@@ -10,12 +10,9 @@ import brown.games.GameState;
 import brown.games.Player;
 import brown.games.algos.MiniMaxEvaluation;
 
-
-
 /**
  * @author Matt Brown msbcode@gmail.com
  * @date Jun 6, 2010
- *
  */
 public class TicTacMiniMaxEvaluationTest {
 
@@ -66,7 +63,6 @@ public class TicTacMiniMaxEvaluationTest {
 		assertEquals(expected, move);
 	}
 
-
 	/**
 	 * a move should still be returned even when all paths lead to a loss
 	 */
@@ -85,5 +81,25 @@ public class TicTacMiniMaxEvaluationTest {
 			new TicTacPlayer(Tile.X));
 
 		assertNotNull(move);
+	}
+
+	@Test
+	public void testBlocksLaterWinningMove() {
+		// X | X | O
+		// - | O | -
+		// X | - | -
+		board.place(Tile.X, 0, 0);
+		board.place(Tile.X, 0, 1);
+		board.place(Tile.X, 2, 0);
+
+		board.place(Tile.O, 0, 2);
+		board.place(Tile.O, 1, 1);
+
+		TicTacGameMove expected = new TicTacGameMove(Tile.O, 1, 0);
+
+		TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player,
+			new TicTacPlayer(Tile.X));
+
+		assertEquals(expected, move);
 	}
 }
