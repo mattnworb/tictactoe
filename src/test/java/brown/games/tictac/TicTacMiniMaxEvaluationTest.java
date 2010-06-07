@@ -39,27 +39,19 @@ public class TicTacMiniMaxEvaluationTest {
 
 	@Test
 	public void testBlocksWinningMoveAtPly2() {
-
-		// boards[0] = new Tile[]{ Tile.X, Tile.X, null };
-		// boards[1] = new Tile[]{ null, Tile.O, null };
-		// boards[2] = new Tile[]{ null, null, null };
-		board.place(Tile.X, 0, 0);
-		board.place(Tile.X, 0, 1);
-		board.place(Tile.O, 1, 1);
-
-		TicTacGameMove move = (TicTacGameMove) eval.bestMove(state, player,
-			new TicTacPlayer(Tile.X));
-
-		if (log.isDebugEnabled()) log.debug("testBlocksWinningMove: move is {}", move);
-
-		TicTacGameMove expected = new TicTacGameMove(Tile.O, 0, 2);
-		assertEquals(expected, move);
+		testBlocksWinningMove(2);
 	}
 
 	@Test
 	public void testBlocksWinningMoveAtPly3() {
+		testBlocksWinningMove(3);
+	}
 
-		eval = new MiniMaxEvaluation(3);
+	/**
+	 * @param ply
+	 */
+	private void testBlocksWinningMove(int ply) {
+		eval = new MiniMaxEvaluation(ply);
 
 		board.place(Tile.X, 0, 0);
 		board.place(Tile.X, 0, 1);
@@ -73,6 +65,7 @@ public class TicTacMiniMaxEvaluationTest {
 		TicTacGameMove expected = new TicTacGameMove(Tile.O, 0, 2);
 		assertEquals(expected, move);
 	}
+
 
 	/**
 	 * a move should still be returned even when all paths lead to a loss
