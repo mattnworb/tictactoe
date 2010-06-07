@@ -57,12 +57,20 @@ public class MiniMaxEvaluation implements Evaluation {
 
 		Collection<GameMove> moves = player.validMoves(s);
 
+		// if no more moves or we've reached the end of the analysis, return the
+		// state score
 		if (p == 0 || moves.isEmpty()) {
-			return new MoveEvaluation(original.eval(state));
+			
+			final int score = original.eval(state);
+			final MoveEvaluation e = new MoveEvaluation(score);
+			if (log.isDebugEnabled()) log.debug("minimax: at end of tree, returning [{}]", e);
+			return e;
 		}
 
+		final boolean isPlayer = player == original;
+
 		// set a lower bound for best, which we will try to improve on
-		MoveEvaluation best = new MoveEvaluation(player == original ? Integer.MIN_VALUE
+		MoveEvaluation best = new MoveEvaluation(isPlayer ? Integer.MIN_VALUE
 				: Integer.MAX_VALUE);
 
 		for (GameMove move : moves) {
@@ -73,17 +81,21 @@ public class MiniMaxEvaluation implements Evaluation {
 			move.undo(s);
 
 			// if we improved, keep track of new score and move
-			if (player == original) {
+			if (isPlayer) {
 				if (me.score > best.score) {
 					if (log.isDebugEnabled())
-						log.debug("minimax: move {} is better than previous best {}", me, best);
+						log.debug("minimax: isPlayer and move {} is better than previous best {}",
+							me, best);
 					best = new MoveEvaluation(move, me.score);
 				}
 			}
 			else {
-				if (log.isDebugEnabled())
-					log.debug("minimax: move {} is better than previous best {}", me, best);
-				if (me.score < best.score) best = new MoveEvaluation(move, me.score);
+				if (me.score < best.score) {
+					if (log.isDebugEnabled())
+						log.debug("minimax: isOpponent and move {} is worse than previous best {}",
+							me, best);
+					best = new MoveEvaluation(move, me.score);
+				}
 			}
 		}
 		return best;

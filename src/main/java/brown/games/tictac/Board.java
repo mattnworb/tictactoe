@@ -222,6 +222,11 @@ public class Board {
 		}
 
 		@Override
+		public String toString() {
+			return super.toString() + Arrays.toString(data);
+		}
+
+		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
