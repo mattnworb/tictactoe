@@ -3,6 +3,7 @@ package brown.games.tictac;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class TicTacMiniMaxEvaluationTest {
 	}
 
 	@Test
+	@Ignore
 	public void testBlocksWinningMove() {
 
 		state.board.place(Tile.X, 0, 0);
@@ -81,6 +83,7 @@ public class TicTacMiniMaxEvaluationTest {
 	}
 
 	@Test
+	@Ignore
 	public void testBlocksLaterWinningMove() {
 		// X | X | O
 		// - | O | -
