@@ -1,13 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>brown</groupId>
 	<artifactId>tictactoe</artifactId>
 	
-	<version>0.1</version>
+	<name>TicTacToe game library</name>
 	
-	<scm>
-		<connection>scm:git:file://c/Users/Matt/workspace/tictactoe</connection>
-	</scm>
+	<version>0.1</version>
 	
 	<dependencies>
 		<dependency>
