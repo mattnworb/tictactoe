@@ -117,7 +117,7 @@ public class TicTacGameState implements GameState {
 		return false;
 	}
 
-	protected boolean isWinner(final TicTacPlayer player) {
+	public boolean isWinner(final TicTacPlayer player) {
 		if (!isWin()) return false;
 
 		// return true if any tuple on the board has all tiles equal to
